@@ -171,7 +171,40 @@ $$
 Probar que si \(G\) es conexo y no regular, entonces \(\chi(G) \leq \Delta(G)\).
 
 \subproblem
-Completar prueba
+Sea $G$ un grafo conexo con grado máximo $\Delta(G)$. Si $G$ es un ciclo impar o un grafo completo, es conocido que $\chi(G) = \Delta(G) + 1$. Supongamos que $G$ no es ninguno de estos casos y probemos que $\chi(G) \leq \Delta(G)$.
+
+Primero vamos a plantear la estrategia de la demostración:
+
+\begin{enumerate}
+    \item Elegimos un vértice $x$ de grado mínimo $\delta$.
+    \item Luego, con ese vértice ejecutamos BFS, para geneerar un orden de los vértices.
+    \item Tomamos el orden inverso al obtenido y coloreamos usando Greedy.
+    \item Mostramos que en cada paso hay a lo sumo $\Delta - 1$ colores ocupados en los vecinos anteriores.
+    \item Con $\Delta$ colores disponibles, siempre hay un color libre.
+\end{enumerate}
+
+Elegimos un vértice arbitrario $x$ (tal que $d(x) = \delta(x)$) y ejecutamos un \textit{BFS} desde $x$. Esto nos da un árbol generador de $G$ y un orden en el que se descubren los vértices. Denotemos este orden como:
+\[
+y_1, y_2, \dots, y_n, \quad \text{donde } y_1 = x.
+\]
+Invertimos este orden y llamamos a la secuencia resultante:
+\[
+x_1, x_2, \dots, x_n, \quad \text{donde } x_n = x.
+\]
+
+En este nuevo orden, salvo por $x_n = x$, cada vértice $x_i$ tiene al menos un vecino posterior en la secuencia. Esto es porque en el BFS cada vértice (salvo la raíz) es descubierto por algún vecino anterior en el BFS, lo que se traduce en un vecino posterior en el orden invertido.
+
+Utilizamos un coloreo greedy en el orden $x_1, x_2, \dots, x_n$:
+\begin{itemize}
+    \item Asignamos el color 1 a $x_1$.
+    \item Para cada $x_i$ con $i > 1$, elegimos el menor color disponible que no haya sido asignado a un vecino anterior en el orden.
+\end{itemize}
+
+Observamos que, al momento de colorear $x_i$, la cantidad de colores que ya están usados en sus vecinos anteriores es a lo sumo $\Delta(G) - 1$. Esto se debe a que $x_i$ siempre tiene al menos un vecino posterior en el orden, por lo que no todos sus $\Delta(G)$ vecinos pueden haber sido coloreados antes que él.
+
+Dado que hay $\Delta(G)$ colores disponibles, siempre hay un color libre para cada vértice.
+
+El coloreo greedy nunca usa más de $\Delta(G)$ colores, por lo que $\chi(G) \leq \Delta(G)$, como queríamos demostrar.
 
 \problem
 Probar que 2-COLOR es polinomial.
