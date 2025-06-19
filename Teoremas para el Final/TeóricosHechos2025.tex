@@ -1,0 +1,185 @@
+\documentclass[a4paper]{article}
+
+\usepackage{xcolor}
+\usepackage[
+  nomarginpar,
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+]{geometry} 
+\usepackage{amsmath, amssymb}  
+
+% Espaciado entre párrafos y sin sangría
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+
+% Contadores de problema y subproblema
+\newcounter{problem}
+\newcounter{subproblem}[problem]
+
+% Comando \problem (con o sin *)
+\makeatletter
+\newcommand{\problem}{%
+  \@ifstar{\Problem}{\stepcounter{problem}\Problem{\theproblem}}}
+
+\newcommand{\Problem}[1]{%
+  \setcounter{problem}{#1}%
+  \par
+  {\mbox{\textbf{\Large Pregunta #1}}%
+  \leaders\hbox{\colorbox{black!20}{\phantom{\Large I}}}\hfill}%
+  \hspace{-2em}\colorbox{black!20}{\phantom{\Large I}}%
+  \par
+}
+
+% Comando \subproblem (con o sin *)
+\newcommand{\subproblem}{%
+  \@ifstar{\Subproblem}{\stepcounter{subproblem}\Subproblem{\thesubproblem}}}
+
+\newcommand{\Subproblem}[1]{%
+  \setcounter{subproblem}{#1}%
+  \par\vspace{0.5em}
+  {\colorbox{black!10}{\makebox[\dimexpr\linewidth-2\fboxsep]{%
+    \textbf{\large Solución}%
+  }}}\par
+}
+\makeatother
+
+\begin{document}
+
+\problem
+¿Cuál es la complejidad del algoritmo de Edmonds-Karp? Probarlo. (\textsc{Nota: en la prueba se definen unas distancias, y se prueba que esas distancias no disminuyen en pasos sucesivos de EK. Ud. puede usar esto sin necesidad de probarlo})
+
+\subproblem
+Completar prueba
+
+\problem   
+
+Probar que si, dados vértices \(x, z\) y flujo \(f\), definimos la distancia relativa a \(f\) como la longitud del menor \(f\)-camino aumentante entre \(x\) y \(z\) (si existe), o infinito si no existe, o 0 si \(x = z\), denotándola como \(d_f(x, z)\), y definimos \(d_k(x) = d_{f_k}(s, x)\), donde \(f_k\) es el \(k\)-ésimo flujo en una corrida de Edmonds-Karp, entonces \(d_k(x) \leq d_{k+1}(x)\).
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que si, dados vértices \(x, z\) y flujo \(f\), definimos la distancia relativa a \(f\) como la longitud del menor \(f\)-camino aumentante entre \(x\) y \(z\) (si existe), o infinito si no existe, o 0 si \(x = z\), denotándola como \(d_f(x, z)\), y definimos \(b_k(x) = d_{f_k}(x, t)\), donde \(f_k\) es el \(k\)-ésimo flujo en una corrida de Edmonds-Karp, entonces \(b_k(x) \leq b_{k+1}(x)\).  
+\textit{(Este teorema solo se tomará a partir de diciembre 2025).}
+
+\subproblem
+Completar prueba
+
+\problem
+¿Cuál es la complejidad del algoritmo de Dinic? Probarla en ambas versiones: Dinitz original y Dinic-Even.  
+\textit{(No hace falta probar que la distancia en redes auxiliares sucesivos aumenta).}
+
+\subproblem
+Completar prueba
+
+\problem
+¿Cuál es la complejidad del algoritmo de Wave? Probarla.  
+\textit{(No hace falta probar que la distancia en redes auxiliares sucesivos aumenta).}
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que la distancia en redes auxiliares sucesivos aumenta.  
+\textit{(Este teorema solo se tomará a partir de diciembre 2025).}
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que si \(f\) es un flujo maximal, entonces existe un corte \(S\) tal que \(v(f) = \text{cap}(S)\).  
+\textit{(Puede usar sin necesidad de probarlo que si \(f\) es flujo y \(S\) es corte, entonces \(v(f) = f(S, \bar{S}) - f(\bar{S}, S)\)).}
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que si \(G\) es conexo y no regular, entonces \(\chi(G) \leq \Delta(G)\).
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que 2-COLOR es polinomial.
+
+\subproblem
+Completar prueba
+
+\problem
+Enunciar y probar el Teorema de Hall.
+
+\subproblem
+Completar prueba
+
+\problem
+Enunciar y probar el teorema del matrimonio de Kőnig.
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que si \(G\) es bipartito entonces \(\chi'(G) = \Delta(G)\).  
+\textit{(Este teorema solo se tomará a partir de diciembre 2025).}
+
+\subproblem
+Completar prueba
+
+\problem
+Demostrar las complejidades \(O(n^4)\) y \(O(n^3)\) del algoritmo Húngaro.  
+\textit{(Solo a partir de diciembre 2025).}
+
+\subproblem
+Completar prueba
+
+\problem
+Enunciar el teorema de la cota de Hamming y probarlo.
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que si \(H\) es matriz de chequeo de \(C\), entonces:  
+\[
+\delta(C) = \min \{ j \mid \exists \text{ un conjunto de } j \text{ columnas LD de } H \}
+\]  
+(LD significa “linealmente dependiente”).
+
+\subproblem
+Completar prueba
+
+
+\problem
+Sea \(C\) un código cíclico de dimensión \(k\) y longitud \(n\), y sea \(g(x)\) su polinomio generador. Probar que:  
+
+\begin{itemize}
+    \item[i)] \(C\) está formado por los múltiplos de \(g(x)\) de grado menor que \(n\).
+    \item[ii)] $ C = \{ v(x) \cdot g(x) : v(x) \text{ es un polinomio cualquiera} \} $
+    \item[iii)] \(gr(g(x)) = n - k\)
+    \item[iv)] \(g(x)\) divide a \(1 + x^n\)
+\end{itemize}
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que 3SAT es NP-completo.
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que 3-COLOR es NP-completo.
+
+\subproblem
+Completar prueba
+
+\problem
+Probar que Matrimonio3D (matrimonio trisexual) es NP-completo.
+
+\subproblem
+Completar prueba
+
+
+\end{document}
