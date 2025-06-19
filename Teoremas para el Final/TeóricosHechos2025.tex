@@ -93,7 +93,77 @@ Probar que si \(f\) es un flujo maximal, entonces existe un corte \(S\) tal que 
 \textit{(Puede usar sin necesidad de probarlo que si \(f\) es flujo y \(S\) es corte, entonces \(v(f) = f(S, \bar{S}) - f(\bar{S}, S)\)).}
 
 \subproblem
-Completar prueba
+Definamos
+$$
+S=\{s\} \cup\{x \in V: \text { exista un } f \text {-camino aumentante desde } s \text { a } x\}
+$$
+
+\begin{itemize}
+    \item Como $f$ es maximal entonces no existen $f$-caminos aumentantes desde $s$ a $t$ pues si existiese un tal $f$-camino aumentante, podriamos mandar un $\varepsilon>0$ a través de el, obteniendo un flujo $f^{*}$ tal que $v\left(f^{*}\right)=v(f)+\varepsilon>v(f)$ lo cual contradice que $f$ sea maximal. Por lo tanto, como no existen $f$-caminos aumentantes desde $s$ a $t$ entonces $t \notin S$.
+    \item Como $s \in S$ y  $t \notin S$, entonces $S$ \textbf{es un corte}.
+\end{itemize}
+
+Observemos que en el resto de la prueba no usaremos que $f$ es maximal, solo que es flujo y que $S$ es corte. Es decir, la prueba valdría para cualquier $f$ tal que el $S$ definido sea un corte. Esto será importante luego.
+
+Como $f$ es flujo y $S$ es corte, entonces $v(f)=f(S, \bar{S})-f(\bar{S}, S)$. Calculemos $f(S, \bar{S})$ y $f(\bar{S}, S)$.
+
+\begin{enumerate}
+    \item Cálculo de $f(S, \bar{S})$:
+    $$
+    f(S, \bar{S})=\sum_{x, y} f(\overrightarrow{x y})[x \in S][y \notin S][x y \in E]
+    $$
+    Consideremos un par $x, y$ de los que aparecen en esa suma. Como $x \in S$, entonces existe un $f$-camino aumentante entre $s$ y $x$, digamos $s=$ $x_{0}, x_{1}, \ldots, x_{r}=x$. Pero como $y \notin S$, entonces no existe ningún $f$-camino aumentante entre $s$ e $y$. En particular, el camino
+    $$
+    s=x_{0}, x_{1}, \ldots, x_{r}=x, y
+    $$
+    \textbf{no es un $f$-camino aumentante}. Pero $\overrightarrow{x y} \in E$, asi \underline{que debería poder serlo}.
+    
+    ¿Por qué $s=x_{0}, x_{1}, \ldots, x_{r}=x, y$ no es un $f$-camino aumentante a pesar de que $s=x_{0}, x_{1}, \ldots, x_{r}=x$ si lo es y $\overrightarrow{x y}$ existe? La única razón por la cual no es un $f$-camino aumentante es porque no podemos usar el lado $\overrightarrow{x y}$ por estar saturado, es decir:
+    $$
+    f(\overrightarrow{x y})=c(\overrightarrow{x y})
+    $$
+    Esto es cierto para cualesquiera $x, y$ que aparezcan en esa suma. Entonces:
+    $$
+    \begin{aligned}
+    f(S, \bar{S}) & =\sum_{x, y} f(\overrightarrow{x y})[x \in S][y \notin S][x y \in E] \\
+    & =\sum_{x, y} c(\overrightarrow{x y})[x \in S][y \notin S][x y \in E] \\
+    & =c(S, \bar{S})=\operatorname{cap}(S)
+    \end{aligned}
+    $$
+    \item Cálculo de $f(\bar{S}, S)$:
+    $$
+    f(\bar{S}, S)=\sum_{x, y} f(\overrightarrow{x y})[x \notin S][y \in S][x y \in E]
+    $$
+    Consideremos un par $x, y$ de los que aparecen en esa suma. Como $y \in S$, entonces existe un $f$-camino aumentante entre $s$ e $y$, digamos $s=x_{0}, x_{1}, \ldots, x_{r}=y$. Pero como $x \notin S$, entonces no existe un $f$-camino aumentante entre $s$ y $x$. En particular
+    $$
+    s=x_{0}, x_{1}, \ldots, x_{r}=y, x
+    $$
+    NO ES un $f$-camino aumentante. Pero $\overrightarrow{x y} \in E$, asi que PODRIA serlo, usando $y, x$ como lado backward.
+
+    ¿Porqué $s=x_{0}, x_{1}, \ldots, x_{r}=y, x$ no es un $f$-camino aumentante a pesar de que $s=x_{0}, x_{1}, \ldots, x_{r}=y$ si lo es y $\overrightarrow{x y}$ existe? La única razón es que no podemos usarlo como lado backward por estar vacio, es decir, que $f(\overrightarrow{x y})=0$.
+
+    Esto es cierto para cualesquiera $x, y$ que aparezcan en esa suma. Entonces:
+
+    $$
+    \begin{aligned}
+    f(\bar{S}, S) & =\sum_{x, y} f(\overrightarrow{x y})[x \notin S][y \in S][x y \in E] \\
+    & =\sum_{x, y} 0[x \notin S][y \in S][x y \in E] \\
+    & =0
+    \end{aligned}
+    $$
+\end{enumerate}
+Entonces probamos que para este $S$:
+\begin{itemize}
+    \item $f(S, \bar{S})=\operatorname{cap}(S)$
+    \item $f(\bar{S}, S)=0$
+\end{itemize}
+Por lo tanto
+$$
+\begin{aligned}
+v(f) & =f(S, \bar{S})-f(\bar{S}, S) \\
+& = \operatorname{cap}(S)-0=\operatorname{cap}(S)
+\end{aligned}
+$$
 
 \problem
 Probar que si \(G\) es conexo y no regular, entonces \(\chi(G) \leq \Delta(G)\).
