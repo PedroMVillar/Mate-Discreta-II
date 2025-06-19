@@ -9,6 +9,8 @@
   right=1in
 ]{geometry} 
 \usepackage{amsmath, amssymb}  
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 % Espaciado entre párrafos y sin sangría
 \setlength{\parindent}{0em}
@@ -175,7 +177,85 @@ Completar prueba
 Probar que 2-COLOR es polinomial.
 
 \subproblem
-Completar prueba
+Para probar esto, vamos a dar un algoritmo, que cumpla lo siguiente:
+\begin{enumerate}
+    \item Resuelve el problema de $2$-color.
+    \item Corre en tiempo polinomial.
+\end{enumerate}
+
+\begin{center}
+    La idea es dar primero el algoritmo, luego probar que es polinomial y por último en la \texttt{correctitud}, probar que el algoritmo da respuestas correctas, es decir, funciona.
+\end{center}
+
+Antes de comenzar con la prueba, vamos a dar una observación que nos será útil mas adelante:
+\begin{itemize}
+    \item \textbf{$\chi(G) \leq 2 \iff \chi(C) \leq 2 \quad \forall c.c \in C$ del grafo $G$, es decir, si cada componente conexa del grafo tiene número cromático menor o igual a $2$, entonces el grafo en sí también lo tiene.}
+\end{itemize}
+\textbf{[-]} Para resolver el problema de $2$-color, vamos a usar el algoritmo de BFS, que nos permite colorear un grafo de manera eficiente. La idea es la siguiente:
+\begin{itemize}
+    \item Tomo un vértice $x$ cualquiera en un grafo conexo $G$.
+    \item Construyo un árbol generador $T$ de $G$ usando BFS con raíz en $x$.
+    \item Ejecutar BFS desde $x$ y determinar el nivel de cada vértice $z$.
+    \item Luego asigna los colores según el nivel de los vértices, si el nivel es impar, asigno color $1$, si es par, asigno color $2$.
+    \item Por último verifico que no haya aristas que conecten vértices del mismo color, si las hay, entonces el grafo no es $2$-coloreable.
+\end{itemize}
+\begin{algorithm}
+    \caption{Verificar si un grafo es bipartito (2-color)}
+    \begin{algorithmic}[1]
+        \STATE \textbf{Entrada:} Grafo $G = (V, E)$ conexo
+        \STATE \textbf{Salida:} "Sí" si $G$ es bipartito, "No" en caso contrario
+        \STATE Seleccionar un vértice inicial $x \in V(G)$
+        \STATE Construir un árbol generador $T$ de $G$ usando BFS con raíz en $x$
+        \STATE Ejecutar BFS desde $x$ y determinar el nivel de cada vértice $z$
+        \FOR{cada vértice $z \in V(G)$}
+            \IF{nivel de $T(z)$ es impar}
+                \STATE Asignar $c(z) \gets 1$
+            \ELSE
+                \STATE Asignar $c(z) \gets 2$
+            \ENDIF
+        \ENDFOR
+        \FOR{cada arista $(u, v) \in E(G)$}
+            \IF{$c(u) = c(v)$}
+                \STATE \textbf{Retornar} "No" \COMMENT{El grafo no es bipartito}
+            \ENDIF
+        \ENDFOR
+        \STATE \textbf{Retornar} "Sí" \COMMENT{El grafo es bipartito}
+    \end{algorithmic}
+\end{algorithm}
+\textbf{[2.]} Ahora tenemos que probar la complejidad, como ya sabemos el colorear es gratis, el peso de complejidad recae en el BFS y en el chequeo de las aristas, ambos corren en tiempo $O(m)$ donde $m$ es la cantidad de aristas, por lo tanto, el algoritmo corre en tiempo polinomial.
+
+Ahora bien, si el algoritmo anterior devuelve \textbf{Sí}, es porque el coloreo es propio, y por lo tanto $\chi(G) \leq 2$. En caso contrario, $\chi(G) \geq 3$.
+
+Para probar esto, vamos a ver que el grafo $G$ \textbf{tiene un ciclo impar}. Para comenzar, voy a plantear la estrategia de la demostración:
+
+\textbf{[1]} Por hipótesis, tenemos que el coloreo del \textit{ciclo for} de nuestro algoritmo \textbf{no es propio}. Esto quiere decir que existe una arista $zv \in V(G)$ tal que $c(z) = c(v)$, en este dato vamos a basar la demostración.
+
+\begin{enumerate}
+    \item Considerar el spanning tree $T$ de $G$ generado a partir de un vértice $x$.
+    \item Analizar los caminos únicos de $x$ a $z$ y $v$.
+    \item Usar la arista $zv$ para construir un ciclo impar.
+    \item Probar que el ciclo es impar.
+\end{enumerate}
+
+Sea $T$ el spanning tree con raíz $x$. Como $T$ es un árbol, hay un único camino desde $x$ a cualquier otro vértice.
+\begin{itemize}
+    \item \textbf{Camino de $x$ a $z$ en $T$}: $xz_1z_2 \ldots z_j $ y el nivel de $z$ es $j$.
+    \item \textbf{Camino de $x$ a $v$}: $xv_1v_2 \ldots v_i$ y el nivel de $v$ es $i$.
+\end{itemize}
+
+Como el coloreo no es propio, entonces $c(z) = c(v)$, lo que implica que ambos son pares o ambos son impares, por lo tanto \textbf{la suma de los niveles es par} (i+j es par). 
+
+Dado que ambos caminos empiezan desde el mismo punto $x$ y terminan en distintos puntos $z$ y $v$, en algún punto se separan en $T$, sea $w$ el último vértice común de ambos caminos, de forma tal que:
+
+\begin{equation*}
+    z_0=v_0, \, z_1=v_1, \ldots, z_p=v_p = w \, 
+\end{equation*}
+
+Teniendo en cuenta que $xv$ es un lado de $G$ y que $z_k = z$ y $v_j = v$, entonces en $G$ tenemos el ciclo:
+\begin{equation*}
+    C = w\underbrace{z_{p+1}z_{p+2} \ldots z_{k-1}z}_{k-p \, \, \, \text{vértices}}\underbrace{vv_{j-1}\ldots v_{p+1}}_{j-p \, \, \, \text{vértices}} w
+\end{equation*}
+en total $C$ tiene $1+k-p+j-p$ vértices, es decir, $k+j-2p+1$ vértices. Como $i+j$ es par, entonces $k+j-2p+1$ es impar, por lo tanto $C$ es un ciclo impar.
 
 \problem
 Enunciar y probar el Teorema de Hall.
