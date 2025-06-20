@@ -60,7 +60,56 @@ Completar prueba
 Probar que si, dados vértices \(x, z\) y flujo \(f\), definimos la distancia relativa a \(f\) como la longitud del menor \(f\)-camino aumentante entre \(x\) y \(z\) (si existe), o infinito si no existe, o 0 si \(x = z\), denotándola como \(d_f(x, z)\), y definimos \(d_k(x) = d_{f_k}(s, x)\), donde \(f_k\) es el \(k\)-ésimo flujo en una corrida de Edmonds-Karp, entonces \(d_k(x) \leq d_{k+1}(x)\).
 
 \subproblem
-Completar prueba
+Para llegar a una contradicción, supongamos que existe un vértice $z$ tal que $d_k(z) > d_{k+1}(z)$, y sea
+$$
+A = \{ y : d_{k+1}(y) < d_k(y) \}
+$$
+un conjunto \textbf{no vacío}.
+
+Y sea $y \in A$ tal que:
+$$
+d_{k+1}(y) = \min{d_{k+1}(x) : x \in A}
+$$
+es decir que $y$ es el vértice más cercano a $s$ en el flujo $f_{k+1}$, entre todos los vértices de $A$.
+
+Notar que:
+\begin{itemize}
+    \item Como $d_{k+1}(y)$ es el mínimo sobre los elementos de $A$:
+    \begin{equation}
+        d_{k+1}(x) < d_{k+1}(y) \Rightarrow x \notin A \Rightarrow d_{k}(x) \leq d_{k+1}(x)  
+        \label{eq:distancia11}
+    \end{equation}
+    \item $y\neq s$ ya que $d_k(s) = d_{k+1}(s) = 0 \Rightarrow s \notin A$.
+    \item $d_{k+1}(y) < \infty$ ya que $y \in A \Rightarrow d_{k+1}(y) < d_k(y) \leq \infty$. Por lo tanto \textit{existe un camino aumentante (en $f_{k+1}$) entre $s$ e $y$ y en dicho camino hay al menos un vértice además de $y$}.
+\end{itemize}
+
+Tomando el camino de menor longitud y $x$ vértice inmediatamente anterior a $y$ en ese camino, tenemos que:
+\begin{equation}
+    d_{k+1}(y) = d_{k+1}(x) + 1 
+    \label{eq:distancia22}
+\end{equation}
+Por lo tanto, $d_{k+1}(x) < d_{k+1}(y)$, y vale la ecuación \ref{eq:distancia11}.
+$$
+    d_k(x) \leq d_{k+1}(x)
+$$
+y así:
+\begin{equation}
+    d_k(y) > d_{k+1}(y) = d_{k+1}(x) + 1 \geq d_k(x) + 1 \tag{3} \label{eq:distancia33}
+\end{equation}
+Ahora bien, si $\overrightarrow{xy}$ estuviese disponible en el paso $k$, tendríamos que $d_k(y) \leq d_k(x) + 1$, ya que, si se puede llegar a $x$ a $y$ en un solo paso, entonces el camino mas corto a $y$ no puede ser mas largo que tomar el camino mas corto a $x$ y luego dar el paso hacia $y$ y por lo tanto $d_k(y) \leq d_k(x) + 1$. Pero esto contradice la ecuación \ref{eq:distancia33}. Entonces, \textbf{el lado $\overrightarrow{xy}$ no puede haber estado disponible en el paso $k$}.
+
+Pero aún así, $\overrightarrow{xy}$ forma parte de un camino de $s$ a $y$ en el paso $k+1$, pero si no está disponible en el paso $k$, pero si en el paso $k+1$ es debido a que \textit{se usó como backward en el paso $k$}.
+\begin{enumerate}
+    \item Luego del paso $k-1$, quedó $f_{k-1} = c(\overrightarrow{xy})$.
+    \item En el paso $k$, se usó como backward, por lo tanto se disminuye el flujo en $f_k$ en $\overrightarrow{xy}$, es decir, $f_k(\overrightarrow{xy}) < c(\overrightarrow{xy})$.
+    \item En el paso $k+1$, se usó como forward.
+\end{enumerate}
+Por lo tanto usamos $\overleftarrow{xy}$ en el paso $k$ $\Rightarrow$ tenemos un $f_k$-camino aumentante de la forma $s, \ldots, \overleftarrow{xy}$, entonces, en el paso $k$. Y además $d_k(x) = d_k(y) + 1$ (\textbf{ya que estamos usando EK}). 
+$$
+\Rightarrow d_k(y) > d_k(x) + 1 = d_k(y) + 1 + 1 = d_k(y) + 2 \Rightarrow 0 > 2 
+$$
+Y acá llegamos al \textbf{absurdo}, que vino de suponer que el conjunto $A$ no era vacío. Por lo tanto, $A$ es vacío y por lo tanto $d_k(x) \leq d_{k+1}(x)$ para todo $x$.
+
 
 \problem
 Probar que si, dados vértices \(x, z\) y flujo \(f\), definimos la distancia relativa a \(f\) como la longitud del menor \(f\)-camino aumentante entre \(x\) y \(z\) (si existe), o infinito si no existe, o 0 si \(x = z\), denotándola como \(d_f(x, z)\), y definimos \(b_k(x) = d_{f_k}(x, t)\), donde \(f_k\) es el \(k\)-ésimo flujo en una corrida de Edmonds-Karp, entonces \(b_k(x) \leq b_{k+1}(x)\).  
